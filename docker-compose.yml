@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root_password
+
+  adminer:
+    image: adminer
+    ports:
+      - "8092:8080"
+    depends_on:
+      - db
+
+  app:
+    container_name: real-time-quiz-plateform 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"  # Exposez le port 8000 de votre machine hôte vers le port 8000 de l'application FastAPI
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql+pymysql://user:password@db:3307/database 
