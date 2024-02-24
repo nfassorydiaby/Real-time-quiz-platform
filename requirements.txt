@@ -11,3 +11,5 @@ PyMySQL
 pytest
 requests
 httpx
+python-multipart
+python-jose
