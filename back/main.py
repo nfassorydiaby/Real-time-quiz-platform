@@ -76,6 +76,16 @@ class QuestionResponse(BaseModel):
 class CreateQuestionRequest(BaseModel):
     question_text: str
 
+class OptionResponse(BaseModel):
+    id: int
+    option_text: str
+    question_id: int
+    is_correct: bool
+
+class CreateOptionRequest(BaseModel):
+    option_text: str
+    is_correct: bool
+
 @app.get("/quizs/", status_code=status.HTTP_200_OK, tags=["Quizs"])
 async def readQuiz(db: dbDependency):
     quizs = db.query(models.Quiz).all()
@@ -105,3 +115,18 @@ async def createQuestion(question: CreateQuestionRequest, db: dbDependency, quiz
     db.commit()
     db.refresh(dbQuestion)
     return dbQuestion
+
+@app.get("/question/{questionId}/options", status_code=status.HTTP_200_OK, tags=["Options"])
+async def readOptions(db: dbDependency, questionId: int):
+    questions = db.query(models.Option).filter(models.Option.question_id == questionId).all()
+    return questions
+
+@app.post('/question/{questionId}/options', response_model=OptionResponse, status_code=status.HTTP_201_CREATED, tags=["Options"])
+async def createOptions(option: CreateOptionRequest, db: dbDependency, questionId: int):
+    option_data = option.dict()
+    option_data['question_id'] = questionId 
+    dbOption = models.Option(**option_data)
+    db.add(dbOption)
+    db.commit()
+    db.refresh(dbOption)
+    return dbOption
