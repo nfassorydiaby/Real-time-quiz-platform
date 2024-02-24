@@ -68,6 +68,14 @@ class CreateQuizRequest(BaseModel):
     description: str
     creator_id: int
 
+class QuestionResponse(BaseModel):
+    id: int
+    question_text: str
+    quiz_id: int
+
+class CreateQuestionRequest(BaseModel):
+    question_text: str
+
 @app.get("/quizs/", status_code=status.HTTP_200_OK, tags=["Quizs"])
 async def readQuiz(db: dbDependency):
     quizs = db.query(models.Quiz).all()
@@ -83,56 +91,17 @@ async def createQuiz(quiz: CreateQuizRequest, db: dbDependency):
     return dbQuiz
 
 
-# @app.get("/register/", status_code=status.HTTP_200_OK, tags=["User"])
-# async def readCards(db: dbDependency):
-#      cards = db.query(models.Card).all()
-#      return cards
+@app.get("/quizs/{quizId}/question/", status_code=status.HTTP_200_OK, tags=["Questions"])
+async def readQuestions(db: dbDependency, quizId: int):
+    questions = db.query(models.Question).filter(models.Question.quiz_id == quizId).all()
+    return questions
 
-
-
-
-
-# @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
-# async def getQuizCards(db: dbDependency, date: str | None = None):
-#     cards = db.query(models.Card).filter(
-#         models.Card.category != Category.DONE.value).all()
-#     quizzCards = []
-#     for card in cards:
-#         if card.remainingDays == 0:
-#             quizzCards.append(card)
-#         else:
-#             card.remainingDays -= 1
-#             db.query(models.Card).filter(models.Card.id == card.id).update(
-#                 {"remainingDays": card.remainingDays})
-#             db.commit()
-#     return quizzCards
-
-
-# @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
-# async def checkResponse(db: dbDependency, cardId: UUID4, cardResponse: dict = Body(validBody)):
-#     card = db.query(models.Card).filter(models.Card.id == str(cardId)).first()
-
-#     if not card:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
-
-#     if not cardResponse['isValid']:
-#         # Bad request scenario
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, detail="Bad request")
-
-#     if cardResponse['isValid']:
-#         currentCategoryIndex = list(Category).index(card.category)
-#         nextCategoryIndex = currentCategoryIndex + 1
-#         if nextCategoryIndex < len(Category):
-#             nextCategory = list(Category)[nextCategoryIndex]
-#         else:
-#             nextCategory = Category.DONE.value
-
-#         card.category = nextCategory
-#         card.remainingDays = nextCategoryIndex
-#         db.commit()
-#     else:
-#         card.category = Category.FIRST.value
-#         card.remainingDays = 0
-#         db.commit()
+@app.post('/quizs/{quizId}/question/', response_model=QuestionResponse, status_code=status.HTTP_201_CREATED, tags=["Questions"])
+async def createQuestion(question: CreateQuestionRequest, db: dbDependency, quizId: int):
+    question_data = question.dict()
+    question_data['quiz_id'] = quizId 
+    dbQuestion = models.Question(**question_data)
+    db.add(dbQuestion)
+    db.commit()
+    db.refresh(dbQuestion)
+    return dbQuestion
