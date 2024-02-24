@@ -7,6 +7,7 @@ from uuid import UUID as UUID4
 from fastapi import Body
 from fastapi.middleware.cors import CORSMiddleware
 import auth
+from pydantic import BaseModel
 
 
 # import auth
@@ -55,6 +56,31 @@ def getDb():
 
 
 dbDependency = Annotated[Session, Depends(getDb)]
+
+class QuizResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    creator_id: int
+
+class CreateQuizRequest(BaseModel):
+    title: str
+    description: str
+    creator_id: int
+
+@app.get("/quizs/", status_code=status.HTTP_200_OK, tags=["Quizs"])
+async def readQuiz(db: dbDependency):
+    quizs = db.query(models.Quiz).all()
+    return quizs
+
+
+@app.post("/quizs/", response_model=QuizResponse, status_code=status.HTTP_201_CREATED, tags=["Quizs"])
+async def createQuiz(quiz: CreateQuizRequest, db: dbDependency):
+    dbQuiz = models.Quiz(**quiz.dict())
+    db.add(dbQuiz)
+    db.commit()
+    db.refresh(dbQuiz)
+    return dbQuiz
 
 
 # @app.get("/register/", status_code=status.HTTP_200_OK, tags=["User"])
