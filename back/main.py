@@ -6,6 +6,7 @@ from typing import List, Annotated
 from uuid import UUID as UUID4
 from fastapi import Body
 from fastapi.middleware.cors import CORSMiddleware
+import auth
 
 
 # import auth
@@ -19,7 +20,7 @@ from sqlalchemy.orm import Session
 app = FastAPI(
     title="Real Time Quiz Plateform",
     description="This API aim to provide feature to manage a graphical interface for Real Time Quiz Plateform.")
-
+app.include_router(auth.router)
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
@@ -56,18 +57,13 @@ def getDb():
 dbDependency = Annotated[Session, Depends(getDb)]
 
 
-# @app.get("/cards/", status_code=status.HTTP_200_OK, tags=["Cards"])
+# @app.get("/register/", status_code=status.HTTP_200_OK, tags=["User"])
 # async def readCards(db: dbDependency):
-#     cards = db.query(models.Card).all()
-#     return cards
+#      cards = db.query(models.Card).all()
+#      return cards
 
 
-# @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
-# async def createCard(card: Card, db: dbDependency):
-#     dbCard = models.Card(**card.dict())
-#     db.add(dbCard)
-#     db.commit()
-#     return card
+
 
 
 # @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])

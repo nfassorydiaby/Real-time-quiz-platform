@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Text
 from database import Base
 
 import uuid
@@ -11,8 +11,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String(50), unique=True, index=True)
     email = Column(String(50), unique=True, index=True)
-    hashed_password = Column(String(50))
-    role = Column(String(20))
+    hashed_password = Column(Text)
 
 class Quiz(Base):
     __tablename__ = "quiz"
