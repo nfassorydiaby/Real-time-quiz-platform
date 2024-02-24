@@ -1,4 +1,3 @@
-
 from multiprocessing import AuthenticationError
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
@@ -57,18 +56,10 @@ def getDb():
 dbDependency = Annotated[Session, Depends(getDb)]
 
 
-@app.post("/register/", status_code=status.HTTP_201_CREATED, tags=["User"])
-async def register(user: UserCreate, db: Session = Depends(get_db)):
-    # Vérifiez si l'utilisateur existe déjà
-    db_user = db.query(models.User).filter(models.User.username == user.username).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
-    # Créez un nouvel utilisateur
-    new_user = models.User(username=user.username, email=user.email, hashed_password=user.password)  # Remplacez par un vrai hashage de mot de passe
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+# @app.get("/cards/", status_code=status.HTTP_200_OK, tags=["Cards"])
+# async def readCards(db: dbDependency):
+#     cards = db.query(models.Card).all()
+#     return cards
 
 
 # @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
