@@ -125,8 +125,8 @@ async def readOptions(db: dbDependency, questionId: int):
 async def createOptions(option: CreateOptionRequest, db: dbDependency, questionId: int):
     option_data = option.dict()
     option_data['question_id'] = questionId 
-    dbQption = models.Option(**option_data)
-    db.add(dbQption)
+    dbOption = models.Option(**option_data)
+    db.add(dbOption)
     db.commit()
-    db.refresh(dbQption)
-    return dbQption
+    db.refresh(dbOption)
+    return dbOption
