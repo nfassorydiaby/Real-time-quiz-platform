@@ -29,3 +29,17 @@ services:
       - db
     environment:
       - DATABASE_URL=mysql+pymysql://user:password@db:3307/database 
+
+
+  front:
+    image: node:alpine
+    container_name: vite_docker
+    entrypoint: /bin/sh
+    ports:
+      - 3000:3000
+    working_dir: /front
+    command : -c "npm install && npm start"
+    volumes:
+      - ./front:/front
+    tty: true
+    
