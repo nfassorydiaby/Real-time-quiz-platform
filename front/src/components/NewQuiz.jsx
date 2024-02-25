@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 function NewQuiz() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
   const [theme, setTheme] = useState('');
   const [question, setQuestion] = useState('');
@@ -12,13 +13,17 @@ function NewQuiz() {
   const [option, setOption] = useState('');
   const [isCorrect, setIsCorrect] = useState(false); // State to manage if the option is correct or not
   const [existingQuestions, setExistingQuestions] = useState([]); // State to manage if the option is correct or not
+  const [quiz, setQuiz] = useState({});
+
 
   const [formQuiz, setFormQuiz] = useState({
-    theme: '',
+    title: '',
+    description : '',
+    creator_id : user.id,
   });
 
   const [formQuestion, setFormQuestion] = useState({
-    question: '',
+    question_text: '',
     options: []
   });
 
@@ -43,7 +48,7 @@ function NewQuiz() {
       setIsAddingQuestion(true);
       setFormQuestion({
         ...formQuestion,
-        ['question']: question
+        ['question_text']: question
       });
     }
   };
@@ -51,7 +56,7 @@ function NewQuiz() {
   const handleAddOption = () => {
     if (option.trim() !== '') {
       const newOption = {
-        name: option,
+        option_text: option,
         is_correct: isCorrect, // Assuming isCorrect is a state representing whether the option is correct or not
       };
       setOptions([...options, newOption]);
@@ -69,27 +74,107 @@ function NewQuiz() {
     setIsCorrect(event.target.checked);
   };
 
-  const handleSubmitQuiz = (event) => {
+  const handleSubmitQuiz = async (event) => {
     event.preventDefault();
-    setTheme(formQuiz.theme)
-    setIsAddQuestionEnabled(true);
+    
+    try {
+        const response = await fetch("http://localhost:8000/quizs/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formQuiz),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data)
+            setQuiz(data);
+            console.log(formQuiz)
+            setTheme(formQuiz.title)
+            setIsAddQuestionEnabled(true);
+
+        } else {
+            console.log('Une erreur est surdvenue lors de la creation du quiz');
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+            console.log(error)
+        } else {
+            console.log(error)
+        }
+      }
     
   };
 
-  const handleSubmitQuestion = (event) => {
+  const handleSubmitQuestion = async (event) => {
     event.preventDefault();
     // Add the question from formQuestion to the existing questions state
-    if (formQuestion.question.trim() !== '') {
-      setExistingQuestions([...existingQuestions, formQuestion]);
+    
+
+    try {
+      const response = await fetch(`http://localhost:8000/quizs/${quiz.id}/question`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formQuestion),
+      });
+
+      if (response.ok) {
+          const dataQuestion = await response.json();
+          console.log(dataQuestion)
+
+          for (const option of formQuestion.options) {
+            try {
+                const response = await fetch(`http://localhost:8000/question/${dataQuestion.id}/options`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(option),
+                });
+        
+                if (response.ok) {
+                    const dataOption = await response.json();
+
+                    console.log(dataOption);
+                    
+                    if (formQuestion.question_text.trim() !== '') {
+                      setExistingQuestions([...existingQuestions, formQuestion]);
+                    }
+                    // Reset states
+                    setIsAddingQuestion(false);
+                    setOptions([]);
+                    setQuestion('');
+                    setFormQuestion({
+                      question_text: '',
+                      options: []
+                    });
+
+        
+                } else {
+                    console.log('Une erreur est surdvenue lors de la creation de option');
+                }
+              } catch (error) {
+                if (error.response && error.response.data) {
+                    console.log(error)
+                } else {
+                    console.log(error)
+                }
+              }
+          };
+
+      } else {
+          console.log('Une erreur est surdvenue lors de la creation de la question');
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+          console.log(error)
+      } else {
+          console.log(error)
+      }
     }
-    // Reset states
-    setIsAddingQuestion(false);
-    setOptions([]);
-    setQuestion('');
-    setFormQuestion({
-      question: '',
-      options: []
-    });
   };
 
   return (
@@ -110,10 +195,21 @@ function NewQuiz() {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="theme"
-                  name='theme'
+                  id="title"
+                  name='title'
                   type="text"
                   placeholder="Entrez un thème"
+                  onChange={handleChangeQuiz}
+                />
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                  Description
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="description"
+                  name='description'
+                  type="text"
+                  placeholder="Entrez une description"
                   onChange={handleChangeQuiz}
                 />
               </div>
@@ -132,7 +228,7 @@ function NewQuiz() {
             <h2>Questions ajoutées:</h2>
             {existingQuestions.map((existingQuestion, index) => (
               <div key={index}>
-                <p>Question {index + 1}: {existingQuestion.question}</p>
+                <p>Question {index + 1}: {existingQuestion.question_text}</p>
               </div>
             ))}
           </div>
@@ -145,7 +241,8 @@ function NewQuiz() {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="question"
+              id="question_text"
+              name='question_text'
               type="text"
               placeholder="Entrez une question"
               value={question}
@@ -158,7 +255,7 @@ function NewQuiz() {
               </label>
               {options.map((opt, index) => (
                 <div className='my-4' key={index}>
-                  <p>{opt.name} :  {opt.is_correct ? "Vrai" : "Faux"}</p>
+                  <p>{opt.option_text} :  {opt.is_correct ? "Vrai" : "Faux"}</p>
                 </div>
               ))}
               <p>Nouvelle option</p>
@@ -208,8 +305,8 @@ function NewQuiz() {
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="question"
-                name='question'
+                id="question_text"
+                name='question_text'
                 type="text"
                 placeholder="Entrez une question"
                 value={question}

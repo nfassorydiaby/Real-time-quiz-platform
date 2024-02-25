@@ -24,8 +24,12 @@ const LoginForm = () => {
 
         if (response.ok) {
             const data = await response.json();
-console.log(data)
+            console.log(data)
             localStorage.setItem('token', data.access_token);
+            localStorage.setItem('user', JSON.stringify({
+              id: data.user_id,
+              username: data.user_username,
+            }));
             navigate("/");
 
         } else {
