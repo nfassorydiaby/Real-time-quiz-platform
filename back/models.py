@@ -36,6 +36,16 @@ class Option(Base):
     question_id = Column(Integer)
     is_correct = Column(Boolean, default=False)
 
+class Salle(Base):
+    __tablename__ = "salle"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    title = Column(String(255), index=True)
+    is_open = Column(Integer)
+    is_quiz_active = Column(Boolean, default=False)
+    quiz_id = Column(Integer)
+
+
 
 
 

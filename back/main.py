@@ -139,6 +139,20 @@ class CreateOptionRequest(BaseModel):
     option_text: str
     is_correct: bool
 
+class SalleResponse(BaseModel):
+    id: int
+    title: str
+    is_open: bool
+    is_quiz_active: bool
+    quiz_id: int
+
+
+class CreateSalleRequest(BaseModel):
+    title: str
+    is_open: bool
+    is_quiz_active: bool
+    quiz_id: int
+
 
 @app.get("/quizs/", status_code=status.HTTP_200_OK, tags=["Quizs"])
 async def readQuiz(db: dbDependency):
@@ -189,6 +203,21 @@ async def createOptions(option: CreateOptionRequest, db: dbDependency, questionI
     db.commit()
     db.refresh(dbOption)
     return dbOption
+
+
+@app.get("/salle/", status_code=status.HTTP_200_OK, tags=["Salles"])
+async def readSalle(db: dbDependency):
+    salles = db.query(models.Salle).all()
+    return salles
+
+
+@app.post("/salle/", response_model=SalleResponse, status_code=status.HTTP_201_CREATED, tags=["Salles"])
+async def createSalle(salle: CreateSalleRequest, db: dbDependency):
+    dbSalle = models.Salle(**salle.dict())
+    db.add(dbSalle)
+    db.commit()
+    db.refresh(dbSalle)
+    return dbSalle
 
 
 class ConnectionManager:
