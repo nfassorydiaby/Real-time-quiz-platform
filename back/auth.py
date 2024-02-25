@@ -22,7 +22,10 @@ ALGORITHM = "HS256"
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
 
-
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+    
 class CreateUserRequest(BaseModel):
     username: str
     email: str
@@ -57,8 +60,8 @@ async def create_user(create_user_request: CreateUserRequest, db: db_dependency)
     db.commit()
 
 @router.post("/login", response_model=Token)
-async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
-    user = authenticate_user(form_data.username, form_data.password, db)
+async def login_for_access_token(login_request: LoginRequest, db: db_dependency):
+    user = authenticate_user(login_request.username, login_request.password, db)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

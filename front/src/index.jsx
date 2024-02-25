@@ -1,28 +1,33 @@
-import React from 'react';
-import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App';
-import './index.css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import ReactDOM from 'react-dom/client';
 import NewQuiz from './components/NewQuiz';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import Logout from './components/Logout';
+import RequireAuth from './components/RequireAuth.jsx'; 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    children: [
-      {
-        path: "/",
-        element: <App />,
-      },
-      {
-        path: "/new-quiz",
-        element: <NewQuiz />,
-      },
-    ],
+    element: <RequireAuth><App /></RequireAuth>,
   },
-
+  {
+    path: "/new-quiz",
+    element: <RequireAuth><NewQuiz /></RequireAuth>,
+  },
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
+  },
+  {
+    path: "/register",
+    element: <RegisterForm />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
