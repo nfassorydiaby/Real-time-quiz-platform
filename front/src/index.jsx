@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import Logout from './components/Logout';
 import RequireAuth from './components/RequireAuth.jsx'; 
+import QuizGame from "./components/QuizGame.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/new-quiz",
     element: <RequireAuth><NewQuiz /></RequireAuth>,
+  },
+  {
+    path: "/quiz-game",
+    element: <RequireAuth><QuizGame /></RequireAuth>,
   },
   {
     path: "/login",

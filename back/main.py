@@ -189,9 +189,9 @@ async def createQuestion(question: CreateQuestionRequest, db: dbDependency, quiz
 
 @app.get("/question/{questionId}/options", status_code=status.HTTP_200_OK, tags=["Options"])
 async def readOptions(db: dbDependency, questionId: int):
-    questions = db.query(models.Option).filter(
+    options = db.query(models.Option).filter(
         models.Option.question_id == questionId).all()
-    return questions
+    return options
 
 
 @app.post('/question/{questionId}/options', response_model=OptionResponse, status_code=status.HTTP_201_CREATED, tags=["Options"])
