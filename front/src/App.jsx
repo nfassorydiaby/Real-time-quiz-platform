@@ -1,12 +1,12 @@
 import React from 'react';
-import ReadCards from './components/ReadCards'
+import HomeQuiz from './components/HomeQuiz'
 import './index.css'; // Import Tailwind CSS
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <ReadCards />
+        <HomeQuiz />
       </header>
     </div>
   );
