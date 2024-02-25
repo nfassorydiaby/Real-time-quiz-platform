@@ -11,7 +11,7 @@ function NewQuiz() {
   const [options, setOptions] = useState([]);
   const [option, setOption] = useState('');
   const [isCorrect, setIsCorrect] = useState(false); // State to manage if the option is correct or not
-  const [existingQuestions, setExistingQuestions] = useState(false); // State to manage if the option is correct or not
+  const [existingQuestions, setExistingQuestions] = useState([]); // State to manage if the option is correct or not
 
   const [formQuiz, setFormQuiz] = useState({
     theme: '',
@@ -73,10 +73,7 @@ function NewQuiz() {
     event.preventDefault();
     setTheme(formQuiz.theme)
     setIsAddQuestionEnabled(true);
-    // Logic to handle form submission
-    // For now, just navigate or log the theme
-    //navigate('/quiz-summary');
-    // console.log('Theme submitted:', theme);
+    
   };
 
   const handleSubmitQuestion = (event) => {
