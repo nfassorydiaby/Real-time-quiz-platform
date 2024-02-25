@@ -35,7 +35,8 @@ class CreateUserRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
-
+    user_id: int
+    user_username:str
 
 def get_db():
     db = SessionLocal()
@@ -70,7 +71,7 @@ async def login_for_access_token(login_request: LoginRequest, db: db_dependency)
     token = create_access_token(
         user.username, user.id, timedelta(minutes=20)
     )
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "user_id": user.id, "user_username": user.username}
 
 def authenticate_user(username: str, password: str, db):
     user = db.query(User).filter(User.username == username).first()
