@@ -7,31 +7,42 @@ import RegisterForm from './components/RegisterForm';
 import Logout from './components/Logout';
 import RequireAuth from './components/RequireAuth.jsx'; 
 import QuizGame from "./components/QuizGame.jsx";
+import HomeQuiz from "./components/HomeQuiz.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RequireAuth><App /></RequireAuth>,
-  },
-  {
-    path: "/new-quiz",
-    element: <RequireAuth><NewQuiz /></RequireAuth>,
-  },
-  {
-    path: "/quiz-game",
-    element: <RequireAuth><QuizGame /></RequireAuth>,
-  },
-  {
-    path: "/login",
-    element: <LoginForm />,
-  },
-  {
-    path: "/logout",
-    element: <Logout />,
-  },
-  {
-    path: "/register",
-    element: <RegisterForm />,
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <RequireAuth><NewQuiz /></RequireAuth>,
+      },
+      {
+        path: "home-quiz",
+        element: <RequireAuth><HomeQuiz /></RequireAuth>,
+      },
+      {
+        path: "new-quiz",
+        element: <RequireAuth><NewQuiz /></RequireAuth>,
+      },
+      {
+        path: "quiz-game",
+        element: <RequireAuth><QuizGame /></RequireAuth>,
+      },
+      {
+        path: "login",
+        element: <LoginForm />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
+      },
+      {
+        path: "register",
+        element: <RegisterForm />,
+      },
+    ],
   },
 ]);
 

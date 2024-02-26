@@ -47,9 +47,6 @@ function HomeQuiz() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="self-start ml-auto mr-4">
-        <Link to="/logout" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-4">Se déconnecter</Link>
-      </div>
       <div className="container mx-auto">
         <h1 className='text-center text-2xl font-bold mb-4'>Liste des quiz</h1>
         <div className='flex justify-end mr-4'>

@@ -1,13 +1,18 @@
 import React from 'react';
-import HomeQuiz from './components/HomeQuiz'
+import { useOutlet } from 'react-router-dom'; 
 import './index.css'; // Import Tailwind CSS
+import NavBar from './components/NavBar';
 
 function App() {
+  const outlet = useOutlet(); 
+
   return (
     <div className="App">
       <header className="App-header">
-        <HomeQuiz />
+        <NavBar />
       </header>
+
+      {outlet} 
     </div>
   );
 }
