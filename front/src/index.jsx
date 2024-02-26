@@ -8,6 +8,7 @@ import Logout from './components/Logout';
 import RequireAuth from './components/RequireAuth.jsx'; 
 import QuizGame from "./components/QuizGame.jsx";
 import HomeQuiz from "./components/HomeQuiz.jsx";
+import Room from "./components/Room.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "quiz-game",
         element: <RequireAuth><QuizGame /></RequireAuth>,
+      },
+      {
+        path: "/room",
+        element: <RequireAuth><Room /></RequireAuth>,
       },
       {
         path: "login",

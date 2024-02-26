@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 
-function QuizGame() {
+function QuizGame(props) {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const [questionsOptions, setQuestionsOptions] = useState([]);
@@ -13,7 +13,7 @@ function QuizGame() {
 
   const location = useLocation();
 
-  const quiz = location.state.quiz;
+  const quiz = props.quiz;
 
   useEffect(() => {
     const fetchQuestionsOptions = async () => {

@@ -27,7 +27,7 @@ function HomeQuiz() {
       }
     };
 
-    if (quizzes.length == 0) {
+    if (quizzes.length === 0) {
       fetchQuizzes();
     }
     
@@ -35,7 +35,7 @@ function HomeQuiz() {
 
   const quizGame = (quiz) => () => {
     navigate(
-      `/quiz-game`,
+      `/room`,
       {
         state: {
           quiz: quiz,
@@ -57,7 +57,8 @@ function HomeQuiz() {
           quizzes.map(quiz => (
             <div key={quiz.id} className="flex justify-center items-center border p-4 my-4">
               <h2 className="text-lg font-semibold">{quiz.title}</h2>
-              <button onClick={quizGame(quiz)} className="ml-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2">Commencer le quiz</button>
+              {/* <button onClick={quizGame(quiz)} className="ml-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2">Commencer le quiz</button> */}
+              <button onClick={quizGame(quiz)} className="ml-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2">Salle d'attente</button>
             </div>
           ))
         )}
