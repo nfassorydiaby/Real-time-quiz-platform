@@ -219,6 +219,12 @@ async def createSalle(salle: CreateSalleRequest, db: dbDependency):
     db.refresh(dbSalle)
     return dbSalle
 
+@app.get("/quizs/{quizId}/salle/", status_code=status.HTTP_200_OK, tags=["Salles"])
+async def readSalleQuiz(db: dbDependency, quizId: int):
+    salles = db.query(models.Salle).filter(
+        models.Salle.quiz_id == quizId, models.Salle.is_open == True).all()
+    return salles
+
 
 class ConnectionManager:
     def __init__(self):
