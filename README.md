@@ -1,6 +1,6 @@
-# Learning Cards Application
+# Real Time Quiz Platform
 
-This repository contains the code for a learning cards application.
+This repository contains the code for a Real Time Platform.
 
 ## Setup the backend Instructions 
 
