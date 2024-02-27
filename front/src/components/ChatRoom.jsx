@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function ChatRoom({ userId }) {
+function ChatRoom({ username}) {
   const [ws, setWs] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -12,8 +12,7 @@ function ChatRoom({ userId }) {
   }
   
   useEffect(() => {
-    userId = generateUserId();
-    const newWs = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+    const newWs = new WebSocket(`ws://localhost:8000/ws/${username}`);
     setWs(newWs);
 
     newWs.onmessage = (event) => {
@@ -27,7 +26,7 @@ function ChatRoom({ userId }) {
     return () => {
       newWs.close();
     };
-  }, [userId]);
+  }, [username]);
 
   const sendMessage = () => {
     if (ws) {

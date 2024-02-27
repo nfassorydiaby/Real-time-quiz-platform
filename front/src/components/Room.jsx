@@ -126,7 +126,7 @@ function Room() {
       )}
       {quizLaunched && <QuizGame quiz={quiz} />}
 
-      <ChatRoom userId={user.id} />
+      <ChatRoom username={user.username} />
     </div>
 
     // <div className="container mt-3">
