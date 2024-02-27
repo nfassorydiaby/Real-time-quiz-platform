@@ -178,7 +178,8 @@ function NewQuiz() {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="flex justify-center items-center h-screen">
+      <div className="container mx-auto">
       <h1 className="text-center text-2xl font-bold mb-4">Créer un nouveau quiz</h1>
       <div className='flex justify-center'>
         {theme ? (
@@ -323,7 +324,9 @@ function NewQuiz() {
           )}
         </form>
       </div>
+      </div>
     </div>
+    
   );
 }
 

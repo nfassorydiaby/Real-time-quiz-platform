@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import QuizGame from './QuizGame';
-
+import ChatRoom from './ChatRoom';
 
 function Room() {
   const navigate = useNavigate();
@@ -125,6 +125,8 @@ function Room() {
         </>
       )}
       {quizLaunched && <QuizGame quiz={quiz} />}
+
+      <ChatRoom userId={user.id} />
     </div>
 
     // <div className="container mt-3">
