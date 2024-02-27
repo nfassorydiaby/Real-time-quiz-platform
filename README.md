@@ -4,20 +4,14 @@ This repository contains the code for a Real Time Platform.
 
 ## Running the Backend and Frontend Application
 
-Back runs on http://localhost:8000/
-Front runs on http://localhost:3000/
-
-To launch the backend application, use the following command:
+To launch the application, use the following command:
 ```bash
 docker compose build --no-cache
 docker compose up -d
 ```
 
-Run again these two commands for the backend application:
-```bash
-docker compose build
-docker compose up -d --no-cache
-```
+Back runs on http://localhost:8000/
+Front runs on http://localhost:3000/
 
 
 ## Team contributions
