@@ -10,6 +10,12 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
+Run again the following command:
+```bash
+docker compose build --no-cache
+docker compose up -d
+```
+
 Back runs on http://localhost:8000/
 Front runs on http://localhost:3000/
 
