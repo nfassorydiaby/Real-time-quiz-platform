@@ -2,28 +2,9 @@
 
 This repository contains the code for a Real Time Platform.
 
-## Setup the backend Instructions 
+## Running the Backend Application
 
 Back runs on http://localhost:8000/
-
-**In /back folder :**
-
-1. **Create a Virtual Environment:**
-```bash
-python3 -m venv env
-```
-
-2. **Activate Your Environment:**
-```bash
-source env/bin/activate
-```
-
-3. **Install Dependencies:**
-```bash
-pip install -r requirements.txt
-```
-
-## Running the Backend Application
 
 To launch the backend application, use the following command:
 ```bash
